@@ -4,10 +4,10 @@ import src.callbacks as clb
 import src.configuration as C
 import src.models as models
 import src.utils as utils
-
+import os
 from catalyst.dl import SupervisedRunner
-
 from pathlib import Path
+
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")

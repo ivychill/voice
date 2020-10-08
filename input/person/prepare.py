@@ -10,8 +10,8 @@ from joblib import delayed, Parallel
 
 
 def resample(df: pd.DataFrame, target_sr: int):
-    audio_dir = Path("train_audio")
-    resample_dir = Path("train_audio_resampled")
+    audio_dir = Path("train")
+    resample_dir = Path("train_resampled")
     resample_dir.mkdir(exist_ok=True, parents=True)
     warnings.simplefilter("ignore")
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     target_sr = args.sr
 
-    train = pd.read_csv("train.csv")
+    train = pd.read_csv("train.csv", sep=' ')
     dfs = []
     for i in range(args.n_splits):
         if i == args.n_splits - 1:
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     train["resampled_filename"] = train["filename"].map(
         lambda x: x.replace(".mp3", ".wav"))
     train["resampled_channels"] = "1 (mono)"
-    train.to_csv("train.csv", index=False)
+    train.to_csv("train_resampled.csv", index=False)

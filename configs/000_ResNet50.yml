@@ -12,11 +12,14 @@ globals:
     - 0
 
 data:
-  train_skip: input/birdsong-recognition/skipped.txt
-  train_df_path: input/birdsong-recognition/train.csv
-  train_audio_path: input/birdsong-recognition/train_audio_resampled
-  test_df_path: input/birdsong-recognition/test.csv
-  test_audio_path: input/birdsong-recognition/test_audio
+  train_skip: input/person/skipped.txt
+  train_df_path: input/person/train_resampled.csv
+  train_audio_path: input/person/train_resampled
+#  train_skip: input/birdsong-recognition/skipped.txt
+#  train_df_path: input/birdsong-recognition/train.csv
+#  train_audio_path: input/birdsong-recognition/train_audio_resampled
+#  test_df_path: input/birdsong-recognition/test.csv
+#  test_audio_path: input/birdsong-recognition/test_audio
 
 dataset:
   name: SpectrogramDataset
@@ -52,11 +55,12 @@ model:
   name: resnet50
   params:
     pretrained: True
-    n_classes: 264
+    n_classes: 50
 
 loader:
   train:
-    batch_size: 100
+#    batch_size: 100
+    batch_size: 64
     shuffle: True
     num_workers: 12
   valid:
