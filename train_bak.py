@@ -7,7 +7,6 @@ import src.utils as utils
 import os
 from catalyst.dl import SupervisedRunner
 from pathlib import Path
-import numpy as np
 
 
 if __name__ == "__main__":
@@ -30,7 +29,6 @@ if __name__ == "__main__":
 
     for i, (trn_idx, val_idx) in enumerate(
             splitter.split(df, y=df["ebird_code"])):
-        trn_idx = np.concatenate((trn_idx, val_idx))
         if i not in global_params["folds"]:
             continue
         logger.info("=" * 20)
@@ -38,9 +36,11 @@ if __name__ == "__main__":
         logger.info("=" * 20)
 
         trn_df = df.loc[trn_idx, :].reset_index(drop=True)
+        val_df = df.loc[val_idx, :].reset_index(drop=True)
+
         loaders = {
             phase: C.get_loader(df_, datadir, config, phase)
-            for df_, phase in zip([trn_df], ["train"])
+            for df_, phase in zip([trn_df, val_df], ["train", "valid"])
         }
         model = models.get_model(config).to(device)
         criterion = C.get_criterion(config).to(device)

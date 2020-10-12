@@ -139,5 +139,10 @@ dmypy.json
 .idea
 
 # my
+input/
+!input/person/*.py
+!input/person/*.csv
 output/
+!output/*.py
+!output/*.csv
 *.sw*

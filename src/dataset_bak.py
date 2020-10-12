@@ -3,117 +3,61 @@ import librosa
 import numpy as np
 import pandas as pd
 import soundfile as sf
-import os
 import torch.utils.data as data
 
 from pathlib import Path
 
-# BIRD_CODE={
-#  'cjh_6794': 0,
-#  'cl_4732': 1,
-#  'cl_4738': 2,
-#  'cmk_4613': 3,
-#  'cq_7461': 4,
-#  'ctj_6713': 5,
-#  'cy_3658': 6,
-#  'czh_6014': 7,
-#  'gll_6412': 8,
-#  'gyf_3014': 9,
-#  'gyx_3105': 10,
-#  'gzx_0348': 11,
-#  'hml_3467': 12,
-#  'ht_0145': 13,
-#  'hxr_3014': 14,
-#  'jcx_0316': 15,
-#  'jyd_1031': 16,
-#  'lh_1034': 17,
-#  'lmx_9714': 18,
-#  'lqx_9746': 19,
-#  'lww_1346': 20,
-#  'rjn_0346': 21,
-#  'wb_4678': 22,
-#  'wc_3014': 23,
-#  'whl_1010': 24,
-#  'wjx_7974': 25,
-#  'wll_3679': 26,
-#  'wlq_6714': 27,
-#  'ws_0314': 28,
-#  'wx_3476': 29,
-#  'wyh_1973': 30,
-#  'wyj_9746': 31,
-#  'wyy_7741': 32,
-#  'wzy_3121': 33,
-#  'xx_0148': 34,
-#  'ylg_1435': 35,
-#  'ypp_3746': 36,
-#  'yxj_6671': 37,
-#  'zfj_6741': 38,
-#  'zjp_7843': 39,
-#  'znn_3014': 40,
-#  'zq_9742': 41,
-#  'zwq_4476': 42,
-#  'zxd_3476': 43,
-#  'zy_3167': 44,
-#  'zyl_6677': 45,
-#  'zym_0137': 46,
-#  'zym_9745': 47,
-#  'zzg_6647': 48,
-#  'zzw_6479': 49}
-
 BIRD_CODE={
-    'abk_1049': 0,
-    'af_8572': 1,
-    'ah_4729': 2,
-    'aq_3792': 3,
-    'bfh_8971': 4,
-    'bly_1354': 5,
-    'bq_8369': 6,
-    'bz_3269': 7,
-    'cbe_9478': 8,
-    'cej_2304': 9,
-    'ctf_0172': 10,
-    'czf_7398': 11,
-    'da_6092': 12,
-    'dgl_3846': 13,
-    'dq_1348': 14,
-    'dsw_3607': 15,
-    'eqa_3472': 16,
-    'eqg_3205': 17,
-    'glp_0974': 18,
-    'ha_5413': 19,
-    'hcs_4783': 20,
-    'hsd_0642': 21,
-    'jf_4635': 22,
-    'jta_0836': 23,
-    'kjh_7219': 24,
-    'kp_9837': 25,
-    'kpl_2536': 26,
-    'kr_6257': 27,
-    'kyd_0153': 28,
-    'lta_2934': 29,
-    'pbs_0752': 30,
-    'pcy_6375': 31,
-    'pyh_0001': 32,
-    'qf_4356': 33,
-    'qs_8612': 34,
-    'rdk_0724': 35,
-    'rq_7342': 36,
-    'rs_5932': 37,
-    'sj_0269': 38,
-    'sl_9052': 39,
-    'tr_9178': 40,
-    'ts_8039': 41,
-    'wk_7215': 42,
-    'wrb_1378': 43,
-    'wsc_4963': 44,
-    'yge_6705': 45,
-    'yl_7619': 46,
-    'yz_2984': 47,
-    'zc_1804': 48,
-    'zd_1689': 49,
-    'zsq_0001': 50,
-    'zy_2371': 51,
-}
+ 'cjh_6794': 0,
+ 'cl_4732': 1,
+ 'cl_4738': 2,
+ 'cmk_4613': 3,
+ 'cq_7461': 4,
+ 'ctj_6713': 5,
+ 'cy_3658': 6,
+ 'czh_6014': 7,
+ 'gll_6412': 8,
+ 'gyf_3014': 9,
+ 'gyx_3105': 10,
+ 'gzx_0348': 11,
+ 'hml_3467': 12,
+ 'ht_0145': 13,
+ 'hxr_3014': 14,
+ 'jcx_0316': 15,
+ 'jyd_1031': 16,
+ 'lh_1034': 17,
+ 'lmx_9714': 18,
+ 'lqx_9746': 19,
+ 'lww_1346': 20,
+ 'rjn_0346': 21,
+ 'wb_4678': 22,
+ 'wc_3014': 23,
+ 'whl_1010': 24,
+ 'wjx_7974': 25,
+ 'wll_3679': 26,
+ 'wlq_6714': 27,
+ 'ws_0314': 28,
+ 'wx_3476': 29,
+ 'wyh_1973': 30,
+ 'wyj_9746': 31,
+ 'wyy_7741': 32,
+ 'wzy_3121': 33,
+ 'xx_0148': 34,
+ 'ylg_1435': 35,
+ 'ypp_3746': 36,
+ 'yxj_6671': 37,
+ 'zfj_6741': 38,
+ 'zjp_7843': 39,
+ 'znn_3014': 40,
+ 'zq_9742': 41,
+ 'zwq_4476': 42,
+ 'zxd_3476': 43,
+ 'zy_3167': 44,
+ 'zyl_6677': 45,
+ 'zym_0137': 46,
+ 'zym_9745': 47,
+ 'zzg_6647': 48,
+ 'zzw_6479': 49}
 
 # BIRD_CODE = {
 #     'aldfly': 0, 'ameavo': 1, 'amebit': 2, 'amecro': 3, 'amegfi': 4,
@@ -176,34 +120,72 @@ INV_BIRD_CODE = {v: k for k, v in BIRD_CODE.items()}
 PERIOD = 5
 
 
-class NpyDataset(data.Dataset):
-    def __init__(self, root):
-        # self.root = root
-        self.root = 'input/person/train_b_npy'
-        self.data = []
-        data_root = os.path.expanduser(self.root)
-        persons = os.listdir(data_root)
-        for person in sorted(persons):
-            person_dir = os.path.join(data_root, person)
-            fnames = os.listdir(person_dir)
-            for fname in sorted(fnames):
-                path = os.path.join(person_dir, fname)
-                self.data.append((path, person))
+class SpectrogramDataset(data.Dataset):
+    def __init__(self,
+                 df: pd.DataFrame,
+                 datadir: Path,
+                 img_size=224,
+                 waveform_transforms=None,
+                 spectrogram_transforms=None,
+                 melspectrogram_parameters={}):
+        self.df = df
+        self.datadir = datadir
+        self.img_size = img_size
+        self.waveform_transforms = waveform_transforms
+        self.spectrogram_transforms = spectrogram_transforms
+        self.melspectrogram_parameters = melspectrogram_parameters
 
     def __len__(self):
-        # a: 37944; b: 38592
-        return len(self.data)
+        return len(self.df)
 
     def __getitem__(self, idx: int):
-        image = np.load(self.data[idx][0])
+        sample = self.df.loc[idx, :]
+        wav_name = sample["resampled_filename"]
+        ebird_code = sample["ebird_code"]
+        # wav_name = sample["Audio_Name"]
+        # ebird_code = sample["Speaker_ID"]
+
+        y, sr = sf.read(self.datadir / ebird_code / wav_name)
+        print(f'self.waveform_transforms {self.waveform_transforms}')
+        if self.waveform_transforms:
+            y = self.waveform_transforms(y)
+        else:
+            len_y = len(y)
+            effective_length = sr * PERIOD
+            print(f'len_y {len_y}, effective_length {effective_length}')
+            if len_y < effective_length:
+                new_y = np.zeros(effective_length, dtype=y.dtype)
+                start = np.random.randint(effective_length - len_y)
+                new_y[start:start + len_y] = y
+                y = new_y.astype(np.float32)
+            elif len_y > effective_length:
+                start = np.random.randint(len_y - effective_length)
+                y = y[start:start + effective_length].astype(np.float32)
+            else:
+                y = y.astype(np.float32)
+
+        melspec = librosa.feature.melspectrogram(y, sr=sr, **self.melspectrogram_parameters)
+        melspec = librosa.power_to_db(melspec).astype(np.float32)
+
+        if self.spectrogram_transforms:
+            melspec = self.spectrogram_transforms(melspec)
+        else:
+            pass
+
+        image = mono_to_color(melspec)
+        height, width, _ = image.shape
+        image = cv2.resize(image, (int(width * self.img_size / height), self.img_size))
+        image = np.moveaxis(image, 2, 0)
+        image = (image / 255.0).astype(np.float32)
+
         labels = np.zeros(len(BIRD_CODE), dtype=int)
-        person = self.data[idx][1]
-        if person == '0':
+        # labels[BIRD_CODE[ebird_code]] = 1
+        if ebird_code == '0':
             pass
             # print('-------- fake --------')
         else:
             # print('-------- real --------')
-            labels[BIRD_CODE[person]] = 1
+            labels[BIRD_CODE[ebird_code]] = 1
 
         return {
             "image": image,

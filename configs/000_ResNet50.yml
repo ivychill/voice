@@ -2,7 +2,7 @@ globals:
   seed: 1213
   device: cuda
   num_epochs: 100
-  output_dir: output/000_ResNet50
+  output_dir: output/b_ResNet50
   main_metric: epoch_f1
   minimize_metric: False
   input_key: image
@@ -13,8 +13,8 @@ globals:
 
 data:
   train_skip: input/person/skipped.txt
-  train_df_path: input/person/train_resampled.csv
-  train_audio_path: input/person/train_resampled
+  train_df_path: input/person/train_b_resampled.csv
+  train_audio_path: input/person/train_b_resampled
 #  train_skip: input/birdsong-recognition/skipped.txt
 #  train_df_path: input/birdsong-recognition/train.csv
 #  train_audio_path: input/birdsong-recognition/train_audio_resampled
@@ -55,7 +55,8 @@ model:
   name: resnet50
   params:
     pretrained: True
-    n_classes: 50
+#    n_classes: 50
+    n_classes: 52
 
 loader:
   train:

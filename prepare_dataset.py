@@ -5,8 +5,8 @@ from shutil import copyfile
 from collections import defaultdict
 
 
-source_dir = Path('/home/kcadmin/user/fengchen/voice/tianchi/datasets/train')
-target_dir = Path('/home/kcadmin/user/fengchen/voice/zj/input/person')
+source_dir = Path('/home/kcadmin/user/fengchen/voice/datasets/zj/train')
+target_dir = Path('/home/kcadmin/user/fengchen/voice/datasets/train')
 
 my_dict = defaultdict(int)
 df = pd.read_csv(source_dir/'train.txt', sep=' ')

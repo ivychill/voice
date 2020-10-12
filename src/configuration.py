@@ -90,14 +90,14 @@ def get_loader(df: pd.DataFrame,
         spectrogram_transforms = get_spectrogram_transforms(config)
         melspectrogram_parameters = dataset_config["params"]
         loader_config = config["loader"][phase]
-
-        dataset = datasets.SpectrogramDataset(
-            df,
-            datadir=datadir,
-            img_size=dataset_config["img_size"],
-            waveform_transforms=waveform_transforms,
-            spectrogram_transforms=spectrogram_transforms,
-            melspectrogram_parameters=melspectrogram_parameters)
+        dataset = datasets.NpyDataset(datadir)
+        # dataset = datasets.SpectrogramDataset(
+        #     df,
+        #     datadir=datadir,
+        #     img_size=dataset_config["img_size"],
+        #     waveform_transforms=waveform_transforms,
+        #     spectrogram_transforms=spectrogram_transforms,
+        #     melspectrogram_parameters=melspectrogram_parameters)
     else:
         raise NotImplementedError
 
